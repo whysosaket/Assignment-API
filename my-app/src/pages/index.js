@@ -12,9 +12,27 @@ export default function Home() {
     setForm({ ...form, [name]: value });
   }
 
-  const handleSubmit = (event)=>{
+  const handleSubmit = async (event)=>{
     event.preventDefault();
-    console.log("Submit")
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form)
+    });
+
+    const json = await response.json();
+
+    if(json.error){
+      alert(json.error);
+      return;
+    }
+
+    if(json.success){
+      alert(json.msg);
+      setForm({name: "", roll: "", col: ""});
+    }else alert(json.msg);
   }
 
   return (
